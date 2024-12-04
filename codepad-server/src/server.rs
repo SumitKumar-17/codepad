@@ -1,4 +1,4 @@
-//! Server routes for Letterpad
+//! Server routes for Codepad
 
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
@@ -18,15 +18,15 @@ use warp::{
 
 /// Construct a set of routes for the server
 pub fn routes() -> BoxedFilter<(impl Reply,)> {
-    let letterpad = Arc::new(Letterpad::default());
-    let letterpad = warp::any().map(move || Arc::clone(&letterpad));
+    let codepad = Arc::new(Codepad::default());
+    let codepad = warp::any().map(move || Arc::clone(&codepad));
 
     let socket = warp::path("socket")
         .and(warp::path::end())
         .and(warp::ws())
-        .and(letterpad)
-        .map(|ws: Ws, letterpad: Arc<Letterpad>| {
-            ws.on_upgrade(move |socket| async move { letterpad.on_connection(socket).await })
+        .and(codepad)
+        .map(|ws: Ws, codepad: Arc<Codepad>| {
+            ws.on_upgrade(move |socket| async move { codepad.on_connection(socket).await })
         });
 
     socket.boxed()
@@ -34,7 +34,7 @@ pub fn routes() -> BoxedFilter<(impl Reply,)> {
 
 /// The main object for a collaborative session
 #[derive(Default)]
-struct Letterpad {
+struct Codepad {
     state: RwLock<State>,
     count: AtomicU64,
     notify: Notify,
@@ -46,7 +46,7 @@ struct State {
     messages: Vec<(u64, String)>,
 }
 
-impl Letterpad {
+impl Codepad {
     async fn on_connection(&self, mut socket: WebSocket) {
         let id = self.count.fetch_add(1, Ordering::Relaxed);
         info!("connection! id = {}", id);

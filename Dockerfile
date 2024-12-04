@@ -9,18 +9,18 @@ WORKDIR /home/rust/src
 RUN apk --no-cache add curl musl-dev
 RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 COPY . .
-RUN wasm-pack build letterpad-core
+RUN wasm-pack build codepad-core
 
 FROM node:alpine as frontend
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
-COPY --from=wasm /home/rust/src/letterpad-core/pkg letterpad-core/pkg
+COPY --from=wasm /home/rust/src/codepad-core/pkg codepad-core/pkg
 RUN npm ci
 COPY . .
 RUN npm run build
 
 FROM scratch
 COPY --from=frontend /usr/src/app/build build
-COPY --from=backend /home/rust/src/target/x86_64-unknown-linux-musl/release/letterpad-server .
+COPY --from=backend /home/rust/src/target/x86_64-unknown-linux-musl/release/codepad-server .
 USER 1000:1000
-CMD [ "./letterpad-server" ]
+CMD [ "./codepad-server" ]

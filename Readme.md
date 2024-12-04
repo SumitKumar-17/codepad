@@ -1,6 +1,6 @@
-# Letterpad
+# Codepad
 
-**Letterpad** is an _efficient_ and _minimal_ open-source collaborative text
+**Codepad** is an _efficient_ and _minimal_ open-source collaborative text
 editor using the operational transformation (OT) algorithm. It has a client-side
 web interface that communicates by WebSocket with a central server storing
 in-memory data structures.

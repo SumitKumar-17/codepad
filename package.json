@@ -1,5 +1,5 @@
 {
-  "name": "letterpad",
+  "name": "codepad",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "letterpad-core": "file:./letterpad-core/pkg"
+    "codepad-core": "file:./codepad-core/pkg"
   },
   "devDependencies": {
     "@types/react": "^17.0.8",

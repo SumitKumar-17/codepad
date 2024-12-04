@@ -1,6 +1,6 @@
 [workspace]
 
 members = [
-    "letterpad-server",
-    "letterpad-core",
+    "codepad-server",
+    "codepad-core",
 ]

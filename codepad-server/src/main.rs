@@ -1,4 +1,4 @@
-//! Server backend for the Letterpad collaborative text editor
+//! Server backend for the Codepad collaborative text editor
 
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]

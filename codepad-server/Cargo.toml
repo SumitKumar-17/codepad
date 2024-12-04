@@ -1,5 +1,5 @@
 [package]
-name = "letterpad-server"
+name = "codepad-server"
 version = "0.1.0"
 authors =["Sumit Kumar <sumitkanpur2005@gmail.com>"]
 edition = "2021"

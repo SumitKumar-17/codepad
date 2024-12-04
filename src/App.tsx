@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { duplicate } from "letterpad-core";
+import { duplicate } from "codepad-core";
 
 function App() {
   const [input, setInput] = useState("");

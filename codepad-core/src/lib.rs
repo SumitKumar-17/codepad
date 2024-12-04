@@ -1,4 +1,4 @@
-//! Core logic for Letterpad, shared with the client through WebAssembly
+//! Core logic for Codepad, shared with the client through WebAssembly
 
 #![warn(missing_docs)]
 

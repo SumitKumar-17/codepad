@@ -2,7 +2,7 @@
 
 #![cfg(target_arch = "wasm32")]
 
-use letterpad_core::duplicate;
+use codepad_core::duplicate;
 
 use js_sys::JSON;
 use wasm_bindgen_test::*;
