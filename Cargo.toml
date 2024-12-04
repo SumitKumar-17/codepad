@@ -2,7 +2,7 @@
 name = "letterpad"
 version = "0.1.0"
 edition = "2021"
-authors =[Sumit Kumar <sumitkanpur2005@gmail.com>]
+authors =["Sumit Kumar <sumitkanpur2005@gmail.com>"]
 
 [dependencies]
 dotenv = "0.15.0"
