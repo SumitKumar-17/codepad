@@ -2,5 +2,10 @@
 name = "letterpad"
 version = "0.1.0"
 edition = "2021"
+authors =[Sumit Kumar <sumitkanpur2005@gmail.com>]
 
 [dependencies]
+operational-transform = "0.6.0"
+warp = "0.3.1"
+tokio = { version = "1.6.1", features = ["full"] }
+dotenv = "0.15.0"
