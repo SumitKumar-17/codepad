@@ -6,10 +6,8 @@ use std::time::Duration;
 
 use futures::prelude::*;
 use log::{error, info};
-use tokio::{
-    sync::{Notify, RwLock},
-    time,
-};
+use parking_lot::RwLock;
+use tokio::{sync::Notify,time};
 use warp::{
     filters::BoxedFilter,
     ws::{Message, WebSocket, Ws},
@@ -54,7 +52,7 @@ impl Codepad {
         let mut revision: usize = 0;
 
         loop {
-            if self.num_messages().await > revision {
+            if self.num_messages() > revision {
                 match self.send_messages(revision, &mut socket).await {
                     Ok(new_revision) => revision = new_revision,
                     Err(e) => {
@@ -87,8 +85,8 @@ impl Codepad {
         info!("disconnection, id = {}", id);
     }
 
-    async fn num_messages(&self) -> usize {
-        let state = self.state.read().await;
+    fn num_messages(&self) -> usize {
+        let state = self.state.read();
         state.messages.len()
     }
 
