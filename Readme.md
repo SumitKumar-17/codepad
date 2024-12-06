@@ -21,5 +21,5 @@ To run unit tests and integration tests for the server, use the standard
 `cargo test` command. For the WebAssembly component, you can run tests in a
 headless browser with
 ```
-wasm-pack test codepad-core --chrome --headless
+wasm-pack test codepad-wasm --chrome --headless
 ```

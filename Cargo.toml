@@ -2,5 +2,5 @@
 
 members = [
     "codepad-server",
-    "codepad-core",
+    "codepad-wasm",
 ]

@@ -9,12 +9,12 @@ WORKDIR /home/rust/src
 RUN apk --no-cache add curl musl-dev
 RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 COPY . .
-RUN wasm-pack build codepad-core
+RUN wasm-pack build codepad-wasm
 
 FROM node:alpine as frontend
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
-COPY --from=wasm /home/rust/src/codepad-core/pkg codepad-core/pkg
+COPY --from=wasm /home/rust/src/codepad-wasm/pkg codepad-wasm/pkg
 RUN npm ci
 COPY . .
 RUN npm run build

@@ -4,8 +4,7 @@
 
 use std::assert_eq;
 
-use codepad_core::OpSeq;
-use rustpad_core::OpSeq;
+use codepad_wasm::OpSeq;
 
 use wasm_bindgen_test::*;
 

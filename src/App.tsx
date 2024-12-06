@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { set_panic_hook } from "codepad-core";
+import { set_panic_hook } from "codepad-wasm";
 
 function App() {
   const [input, setInput] = useState("");

@@ -3,6 +3,7 @@
 #![warn(missing_docs)]
 
 use operational_transform::OperationSeq;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 pub mod utils;
@@ -10,7 +11,7 @@ pub mod utils;
 /// This is an wrapper around `operational_transform::OperationSeq`, which is
 /// necessary for Wasm compatibility through `wasm-bindgen`.
 #[wasm_bindgen]
-#[derive(Default, Clone, Debug, PartialEq)]
+#[derive(Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct OpSeq(OperationSeq);
 
 /// This is a pair of `OpSeq` structs, which is needed to handle some return
@@ -19,13 +20,32 @@ pub struct OpSeq(OperationSeq);
 #[derive(Default, Clone, Debug, PartialEq)]
 pub struct OpSeqPair(OpSeq, OpSeq);
 
+impl OpSeq {
+    /// Transforms two operations A and B that happened concurrently and produces
+    /// two operations A' and B' (in an array) such that
+    ///     `apply(apply(S, A), B') = apply(apply(S, B), A')`.
+    /// This function is the heart of OT.
+    ///
+    /// Unlike `OpSeq::transform`, this function returns a raw tuple, which is
+    /// more efficient but cannot be exported by `wasm-bindgen`.
+    ///
+    /// # Error
+    ///
+    /// Returns `None` if the operations cannot be transformed due to
+    /// length conflicts.
+    pub fn transform_raw(&self, other: &OpSeq) -> Option<(OpSeq, OpSeq)> {
+        let (a, b) = self.0.transform(&other.0).ok()?;
+        Some((Self(a), Self(b)))
+    }
+}
+
 #[wasm_bindgen]
 impl OpSeq {
     /// Creates a default empty `OpSeq`.
     pub fn new() -> Self {
         Self::default()
     }
-    
+
     /// Creates a store for operatations which does not need to allocate  until  `capacity` operations have been stored inside.
     pub fn with_capacity(capacity: usize) -> Self {
         Self(OperationSeq::with_capacity(capacity))
