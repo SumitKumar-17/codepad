@@ -90,22 +90,25 @@ impl Codepad {
         state.messages.len()
     }
 
-    async fn send_messages(
+    fn send_messages(
         &self,
         revision: usize,
         socket: &mut WebSocket,
     ) -> Result<usize, warp::Error> {
-        let state = self.state.read().await;
-        let len = state.messages.len();
-        if revision < len {
-            let messages = serde_json::to_string(&state.messages[revision..])
-                .expect("serde serialization failed for messages");
-            drop(state);
-            socket.send(Message::text(&messages)).await?;
-            Ok(len)
-        } else {
-            Ok(revision)
+        let messages ={
+            let state =self.state.read();
+            let len = state.messages.len();
+            if revision <len {
+                state.messages[revision..].to_owned()
+            } else{
+                Vec::new()
+            }
+        };
+        if !messages.is_empty(){
+            let serialized =serde_json::to_string(&messages).expect("serde serialization for messages vec");
+            socket.send(Message::text(&serialized)).await?;
         }
+        Ok(revision+ messages.len())
     }
 
     async fn handle_message(&self, id: u64, message: Message) {
@@ -114,7 +117,7 @@ impl Codepad {
             Err(()) => return, // Ignore non-text messages
         };
 
-        let mut state = self.state.write().await;
+        let mut state = self.state.write();
         state.messages.push((id, text));
         self.notify.notify_waiters();
     }
