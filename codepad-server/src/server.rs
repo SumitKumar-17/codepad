@@ -122,3 +122,23 @@ impl Codepad {
         self.notify.notify_waiters();
     }
 }
+
+
+#[cfg(test)]
+mod tests{
+    use super::*;
+
+    #[tokio::test]
+    async fn test_single_message(){
+        let filter=routes();
+        let mut client =warp::test::ws()
+        .path("/socket")
+        .handshake(filter)
+        .await
+        .expect("handshake");
+    client.send_text("Hi Sumit").await;
+    let msg=client.recv().await.expect("recv");
+    let msg=msg.to_str().expect("string");
+    assert_eq!(msg,"[[0,\"Hi Sumit\"]]")
+    }
+}
