@@ -7,7 +7,7 @@ use std::time::Duration;
 use futures::prelude::*;
 use log::{error, info};
 use parking_lot::RwLock;
-use tokio::{sync::Notify,time};
+use tokio::{sync::Notify, time};
 use warp::{
     filters::BoxedFilter,
     ws::{Message, WebSocket, Ws},
@@ -90,25 +90,26 @@ impl Codepad {
         state.messages.len()
     }
 
-    fn send_messages(
+    async fn send_messages(
         &self,
         revision: usize,
         socket: &mut WebSocket,
     ) -> Result<usize, warp::Error> {
-        let messages ={
-            let state =self.state.read();
+        let messages = {
+            let state = self.state.read();
             let len = state.messages.len();
-            if revision <len {
+            if revision < len {
                 state.messages[revision..].to_owned()
-            } else{
+            } else {
                 Vec::new()
             }
         };
-        if !messages.is_empty(){
-            let serialized =serde_json::to_string(&messages).expect("serde serialization for messages vec");
+        if !messages.is_empty() {
+            let serialized = serde_json::to_string(&messages)
+                .expect("serde serialization failed for messages vec");
             socket.send(Message::text(&serialized)).await?;
         }
-        Ok(revision+ messages.len())
+        Ok(revision + messages.len())
     }
 
     async fn handle_message(&self, id: u64, message: Message) {
@@ -123,22 +124,21 @@ impl Codepad {
     }
 }
 
-
 #[cfg(test)]
-mod tests{
+mod tests {
     use super::*;
 
     #[tokio::test]
-    async fn test_single_message(){
-        let filter=routes();
-        let mut client =warp::test::ws()
-        .path("/socket")
-        .handshake(filter)
-        .await
-        .expect("handshake");
-    client.send_text("Hi Sumit").await;
-    let msg=client.recv().await.expect("recv");
-    let msg=msg.to_str().expect("string");
-    assert_eq!(msg,"[[0,\"Hi Sumit\"]]")
+    async fn test_single_message() {
+        let filter = routes();
+        let mut client = warp::test::ws()
+            .path("/socket")
+            .handshake(filter)
+            .await
+            .expect("handshake");
+        client.send_text("hello world").await;
+        let msg = client.recv().await.expect("recv");
+        let msg = msg.to_str().expect("string");
+        assert_eq!(msg, "[[0,\"hello world\"]]");
     }
 }

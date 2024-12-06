@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { duplicate } from "codepad-core";
+import { set_panic_hook } from "codepad-core";
 
 function App() {
   const [input, setInput] = useState("");
@@ -7,7 +7,7 @@ function App() {
   const [messages, setMessages] = useState<[number, string][]>([]);
 
   useEffect(() => {
-    console.log(duplicate("Hello"));
+    set_panic_hook();
     const uri =
       (window.location.origin.startsWith("https") ? "wss://" : "ws://") +
       window.location.host +
