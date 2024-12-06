@@ -13,4 +13,13 @@ The backend is written in Rust, using
 [Warp](https://github.com/seanmonstar/warp) and the open source
 [operational-transform](https://github.com/spebern/operational-transform-rs)
 library, which is a port of
-[ot.js](https://github.com/Operational-Transformation/ot.js). 
+[ot.js](https://github.com/Operational-Transformation/ot.js).
+
+
+## Testing
+To run unit tests and integration tests for the server, use the standard
+`cargo test` command. For the WebAssembly component, you can run tests in a
+headless browser with
+```
+wasm-pack test codepad-core --chrome --headless
+```
