@@ -63,11 +63,6 @@ impl From<ServerMsg> for Message {
 }
 
 impl Codepad {
-    /// Construct a new, empty Codepad object
-    pub fn new() -> Self {
-        Default::default()
-    }
-
     /// Handle a connection from a WebSocket
     pub async fn on_connection(&self, socket: WebSocket) {
         let id = self.count.fetch_add(1, Ordering::Relaxed);
