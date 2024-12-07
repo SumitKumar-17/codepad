@@ -1,4 +1,4 @@
-//! Core logic for Codepad, shared with the client through WebAssembly
+//! Core logic for Codepad, shared with the client through WebAssembly.
 
 #![warn(missing_docs)]
 
@@ -46,7 +46,8 @@ impl OpSeq {
         Self::default()
     }
 
-    /// Creates a store for operatations which does not need to allocate  until  `capacity` operations have been stored inside.
+    /// Creates a store for operatations which does not need to allocate  until
+    /// `capacity` operations have been stored inside.
     pub fn with_capacity(capacity: usize) -> Self {
         Self(OperationSeq::with_capacity(capacity))
     }
@@ -132,13 +133,36 @@ impl OpSeq {
         self.0.target_len()
     }
 
-    /// Attempts to desrialize an `OpSeq` from a JSON string.
-    pub fn from_str(s:&str) -> Option<OpSeq>{
+    /// Return the new index of a position in the string.
+    pub fn transform_index(&self, position: u32) -> u32 {
+        let mut index = position as i32;
+        let mut new_index = index;
+        for op in self.0.ops() {
+            use operational_transform::Operation::*;
+            match op {
+                &Retain(n) => index -= n as i32,
+                Insert(s) => new_index += bytecount::num_chars(s.as_bytes()) as i32,
+                &Delete(n) => {
+                    new_index -= std::cmp::min(index, n as i32);
+                    index -= n as i32;
+                }
+            }
+            if index < 0 {
+                break;
+            }
+        }
+        new_index as u32
+    }
+
+    /// Attempts to deserialize an `OpSeq` from a JSON string.
+    #[allow(clippy::should_implement_trait)]
+    pub fn from_str(s: &str) -> Option<OpSeq> {
         serde_json::from_str(s).ok()
     }
 
     /// Converts this object to a JSON string.
-    pub fn to_string(&self) -> String{
+    #[allow(clippy::inherent_to_string)]
+    pub fn to_string(&self) -> String {
         serde_json::to_string(self).expect("json serialization failure")
     }
 }

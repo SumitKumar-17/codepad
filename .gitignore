@@ -3,7 +3,9 @@ pkg
 
 node_modules
 .DS_Store
-build
+dist
 *.local
 
 .vscode
+
+Readme.md

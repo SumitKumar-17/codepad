@@ -1,4 +1,4 @@
-use codepad_server::server;
+use codepad_server::{server, database::Database, ServerConfig};
 
 #[tokio::main]
 async fn main() {
@@ -10,5 +10,20 @@ async fn main() {
         .parse()
         .expect("Unable to parse PORT");
 
-    warp::serve(server()).run(([0, 0, 0, 0], port)).await;
+    let config = ServerConfig {
+        expiry_days: std::env::var("EXPIRY_DAYS")
+            .unwrap_or_else(|_| String::from("1"))
+            .parse()
+            .expect("Unable to parse EXPIRY_DAYS"),
+        database: match std::env::var("SQLITE_URI") {
+            Ok(uri) => Some(
+                Database::new(&uri)
+                    .await
+                    .expect("Unable to connect to SQLITE_URI"),
+            ),
+            Err(_) => None,
+        },
+    };
+
+    warp::serve(server(config)).run(([0, 0, 0, 0], port)).await;
 }

@@ -1,6 +1,6 @@
 [workspace]
+resolver = "2"
+members = ["codepad-server", "codepad-wasm"]
 
-members = [
-    "codepad-server",
-    "codepad-wasm",
-]
+[profile.release]
+lto = true

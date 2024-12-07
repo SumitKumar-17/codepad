@@ -2,8 +2,6 @@
 
 #![cfg(target_arch = "wasm32")]
 
-use std::assert_eq;
-
 use codepad_wasm::OpSeq;
 
 use wasm_bindgen_test::*;
@@ -43,12 +41,25 @@ fn transform_operations() {
     assert_eq!(after_ab_prime, after_ba_prime);
 }
 
-#[wasm_bindgen]
-fn invert_operations(){
-    let s ="abc";
-    let mut o =OpSeq::default();
+#[wasm_bindgen_test]
+fn invert_operations() {
+    let s = "abc";
+    let mut o = OpSeq::default();
     o.retain(3);
     o.insert("def");
-    let p=o.invert(s);
-    assert_eq!(p.apply(&o.apply(s).unwrap()).unwrap(),s);
+    let p = o.invert(s);
+    assert_eq!(p.apply(&o.apply(s).unwrap()).unwrap(), s);
+}
+
+#[wasm_bindgen_test]
+fn transform_index() {
+    let mut o = OpSeq::default();
+    o.retain(3);
+    o.insert("def");
+    o.retain(3);
+    o.insert("abc");
+    assert_eq!(o.transform_index(2), 2);
+    assert_eq!(o.transform_index(3), 6);
+    assert_eq!(o.transform_index(5), 8);
+    assert_eq!(o.transform_index(7), 13);
 }
