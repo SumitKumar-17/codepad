@@ -1,8 +1,5 @@
 # Codepad
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/sumitkumar17/codepad)](https://hub.docker.com/r/sumitkumar17/codepad/)
-[![Docker Image Size](https://img.shields.io/docker/image-size/sumitkumar17/codepad/latest)](https://hub.docker.com/r/sumitkumar17/codepad/)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/sumitkumar17/codepad/ci.yml)](https://github.com/sumitkumar17/codepad/actions/workflows/ci.yml)
 
 **Codepad** is an _efficient_ and _minimal_ open-source collaborative text
 editor based on the operational transformation algorithm. It lets users
@@ -96,12 +93,12 @@ version of this image from Docker Hub. It has multi-platform support for
 docker pull sumitkumar17/codepad
 ```
 
-(You can also manually build this image with `docker build -t rustpad .` in the
+(You can also manually build this image with `docker build -t codepad .` in the
 project root directory.) To run locally, execute the following command, then
 open `http://localhost:3030` in your browser.
 
 ```
-docker run --rm -dp 3030:3030 sumitkumar17/codepad
+docker run --rm -dp 3030:3030 codepad
 ```
 <sup>
 All code is licensed under the <a href="LICENSE">MIT license</a>.
